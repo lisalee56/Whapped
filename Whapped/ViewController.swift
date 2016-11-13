@@ -11,7 +11,7 @@ import CoreBluetooth
 
 
 class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralManagerDelegate, CBPeripheralDelegate{
-  
+    
     
     var manager:CBCentralManager!
     var peripheralManager:CBPeripheralManager!
@@ -31,12 +31,10 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
         manager = CBCentralManager(delegate: self, queue: nil)
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
         
-        peripheralManager.add(CBMutableService(type: WHAPPED_SERVICE_UUID, primary: true))
         
-        peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey: WHAPPED_SERVICE_UUID, CBAdvertisementDataLocalNameKey: WHAPPED_PLAYER])
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         print("did receie memory warning")
         super.didReceiveMemoryWarning()
@@ -51,7 +49,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
             // TO DO: remove all peripherals in a stored peripheral list, so they can be re-added
             
             print("Will be scanning for peripherals");
-            central.scanForPeripherals(withServices: nil, options: nil)
+            central.scanForPeripherals(withServices: [WHAPPED_SERVICE_UUID], options: nil)
             
             // TO DO: put the above on the main thread and say "wait for it to be done" before the next action (because we need the array to be filled before taking action)
             // OR: gcd's dispatch_after
@@ -112,7 +110,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
             }
         }
     }
-
+    
     // characteristics changed -- notify
     func peripheral(
         peripheral: CBPeripheral,
@@ -150,7 +148,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
         central.scanForPeripherals(withServices: nil, options: nil)
     }
     
- 
+    
     
     // === PERIPHERAL MANAGER DELEGATE METHODS ===
     
@@ -158,17 +156,25 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
     
     @available(iOS 6.0, *)
     public func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        // Maybe do something here later?
+        
+        if peripheral.state == CBManagerState.poweredOn {
+            
+            print("Will call start advertising")
+            peripheralManager.add(CBMutableService(type: WHAPPED_SERVICE_UUID, primary: true))
+            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey: WHAPPED_SERVICE_UUID, CBAdvertisementDataLocalNameKey: WHAPPED_PLAYER])
+        }else{
+            print("Bluetooth advertising not available")
+        }
+        
     }
-
+    
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager,error: Error?){
-        print("Peripheral manager started advertising self")
+        print("Peripheral manager started advertising self method")
         if(error != nil){
-            print("Peripheral manager error'd when trying to advertise")
+            print("Peripheral manager error'd when trying to advertise due to: %@", error!)
         }
     }
     
-
-
+    
+    
 }
-
