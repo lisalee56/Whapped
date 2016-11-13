@@ -20,9 +20,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
     let WHAPPED_PLAYER = "Stick-Man"
     
     let WHAPPED_SERVICE_UUID =
-        CBUUID(string: "a495ff21-c5b1-4b44-b512-1370f02d74de") // will determine later
+        CBUUID(string: "ABC669B8-258E-4B3B-A260-2C876204B55F") // will determine later
     let WHAPPED_PLAYER_UUID =
-        CBUUID(string: "a495ff21-c5b1-4b44-b512-1370f02d74de")
+        CBUUID(string: "4980F0C9-AA7F-4EAC-99AF-A9A5B3EB99D6")
     
     override func viewDidLoad() {
         super.viewDidLoad()
