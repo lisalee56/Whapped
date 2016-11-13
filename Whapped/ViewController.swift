@@ -161,7 +161,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
             
             print("Will call start advertising")
             peripheralManager.add(CBMutableService(type: WHAPPED_SERVICE_UUID, primary: true))
-            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey: WHAPPED_SERVICE_UUID, CBAdvertisementDataLocalNameKey: WHAPPED_PLAYER])
+            peripheralManager.startAdvertising([CBAdvertisementDataLocalNameKey: WHAPPED_PLAYER, CBAdvertisementDataServiceUUIDsKey: [WHAPPED_SERVICE_UUID]])
+            
+            
         }else{
             print("Bluetooth advertising not available")
         }
@@ -171,7 +173,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate,CBPeripheralMan
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager,error: Error?){
         print("Peripheral manager started advertising self method")
         if(error != nil){
-            print("Peripheral manager error'd when trying to advertise due to: %@", error!)
+            print("Peripheral manager error'd when trying to advertise due to error: ", error!)
         }
     }
     
